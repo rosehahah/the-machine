@@ -14,6 +14,13 @@ export const STYLES = {
 
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+// The show boxes heads, not bodies: a square from just above the hair to the collar (SPEC 2.1).
+// Same rule as head_from_person() in backend/vision.py, for a person box in screen pixels.
+export function headBox(x, y, w, h) {
+  const side = Math.min(w * 0.62, h * 0.5);
+  return [x + w / 2 - side / 2, y - side * 0.08, side, side];
+}
+
 export function drawBox(ctx, x, y, w, h, style, alpha) {
   const st = STYLES[style] || STYLES.white;
   const s = Math.min(w, h);

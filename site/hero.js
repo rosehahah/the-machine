@@ -1,14 +1,26 @@
 // Landing page hero: a live MPOV replay of a stock clip. The boxes follow the real person tracks detected in
 // the footage (tools/build_clips.py); the grade is the MPOV's WebGL pass.
-// Demo only (自创 sequence): nobody is enrolled here, so the ADMIN identification is scripted (TARGET).
-// No one in the footage is ever marked as a threat.
-import { drawBox, drawLabel } from "./hud.js";
+// Demo only (自创 sequence): nobody is enrolled here, so who gets identified as what is scripted (ROLES).
+// Only labels the MPOV uses in the show (SPEC §3). No one in the footage is marked as a threat.
+import { drawBox, drawLabel, headBox } from "./hud.js";
 import { FX } from "./fx.js";
 
 const CLIP = "4332";                 // TIMES SQ, RAIN
 const CAM = ["TIMES SQ / 7 AVE & W 45 ST", "CAM DAS-7451"];
-// who gets "identified" and when: a man crossing the middle of the frame, in view from 8.4 s to 14 s
+// who gets "identified" and when (seconds into the clip). The ADMIN is a man crossing the middle of the frame,
+// in view from 8.4 s to 14 s; he also gets the status bar and the greeting.
 const TARGET = { tid: 11, at: 8.5 };
+const ROLES = new Map([
+  [11, { at: 8.5, style: "yellow", label: "ADMIN" }],
+  [34, { at: 11.0, style: "yellow", label: "PRIMARY ASSET" }],
+  [44, { at: 13.0, style: "black_yellow", label: "ANALOG INTERFACE" }],
+  [4, { at: 1.0, style: "white", label: "IRRELEVANT" }],
+  [13, { at: 4.6, style: "white", label: "IRRELEVANT" }],
+  [22, { at: 7.2, style: "white", label: "IRRELEVANT" }],
+  [30, { at: 9.8, style: "white", label: "IRRELEVANT" }],
+  [53, { at: 15.0, style: "white", label: "IRRELEVANT" }],
+]);
+const BLINK = 400;                   // a change of colour flashes old/new 3–4 times over ~0.4 s (SPEC 2.3)
 const START_AT = 3;                  // first load: start into the clip so the identification comes soon after boot
 const BOOT = ["THE MACHINE · MPOV", "", "ESTABLISHING FEED…", `${CAM[1]} · ${CAM[0]}`, "SIGNAL ACQUIRED."];
 
@@ -20,7 +32,7 @@ const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 let fx = null;
 try { fx = new FX(cv); } catch { cv.style.display = "none"; }  // no WebGL: draw the video on the HUD canvas
 let focus = 0.5;                     // narrow screens: which part of the 16:9 frame is in view (0..1)
-let meta = null, rect = { x: 0, y: 0, w: 1, h: 1 }, seen = new Map(), target = null, loopStart = -1, glitchUntil = 0;
+let meta = null, rect = { x: 0, y: 0, w: 1, h: 1 }, seen = new Map(), since = new Map(), target = null, loopStart = -1, glitchUntil = 0;
 
 fetch(`media/clips/${CLIP}.json`).then((r) => r.json()).then((m) => (meta = m));
 video.src = `media/clips/${CLIP}.mp4`;
@@ -112,7 +124,7 @@ function frame(ms) {
 
   // a new loop of the clip: forget who was seen, identify again
   const t = video.currentTime;
-  if (t < loopStart || loopStart < 0) { seen.clear(); target = null; loopStart = t; identify.done = false; }
+  if (t < loopStart || loopStart < 0) { seen.clear(); since.clear(); target = null; loopStart = t; identify.done = false; }
   loopStart = t;
 
   const fpos = (t / video.duration) * meta.n, f0 = Math.floor(fpos) % meta.n, f1 = (f0 + 1) % meta.n, k = fpos - Math.floor(fpos);
@@ -131,15 +143,18 @@ function frame(ms) {
     const bw = ((x2 - x1) / 1000) * rect.w, bh = ((y2 - y1) / 1000) * rect.h;
     if (bx + bw < 0 || bx > w) continue;
     shown++;
-    if (target && target.tid === tid) {
-      const since = ms - target.at, blink = since < 900 && Math.floor(since / 150) % 2 === 0;
-      drawBox(ctx, bx, by, bw, bh, blink ? "white" : "yellow", 0.95 * fade);
-      if (!blink) drawLabel(ctx, "ADMIN", bx, by, bw, bh, "yellow", 0.95, w, 12);
+    const [hx, hy, hs] = headBox(bx, by, bw, bh);
+    const role = ROLES.get(tid);
+    if (role && t >= role.at && !$("#hero-boot")) {
+      if (!since.has(tid)) since.set(tid, ms);
+      const age = ms - since.get(tid), blink = age < BLINK && Math.floor(age / 100) % 2 === 0;
+      drawBox(ctx, hx, hy, hs, hs, blink ? "white" : role.style, (role.style === "white" ? 0.85 : 0.95) * fade);
+      if (!blink) drawLabel(ctx, role.label, hx, hy, hs, hs, role.style, 0.95, w, 13);
     } else {
-      drawBox(ctx, bx, by, bw, bh, "white", 0.6 * fade);
+      drawBox(ctx, hx, hy, hs, hs, "white", 0.6 * fade);
     }
   }
-  $("#hero-meta").innerHTML = `OBJECT ID: <b>[TRACKING]</b><br>SUBJECTS: <b>${shown}</b> &nbsp; IDENTIFIED: <b>${target ? 1 : 0}</b>`;
+  $("#hero-meta").innerHTML = `OBJECT ID: <b>[TRACKING]</b><br>SUBJECTS: <b>${shown}</b> &nbsp; IDENTIFIED: <b>${[...since.keys()].filter((tid) => ROLES.get(tid).style !== "white").length}</b>`;
 }
 
 const [place, street] = CAM[0].split(" / ");

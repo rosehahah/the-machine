@@ -1,6 +1,6 @@
 // FEEDS: the camera wall. Mock cameras play stock footage with the real person tracks detected in it;
 // who those people are comes from the world at the cursor time. Live cameras come from the server.
-import { drawBox, drawLabel } from "../../hud.js";
+import { drawBox, drawLabel, headBox } from "../../hud.js";
 import { S, go, on, select } from "../state.js";
 import { $, $$, cropStyle, esc, personRow, roleTag } from "../ui.js";
 import { DAY, W, camCount, caseStatus, fmtAgo, fmtClock, fmtDay, fmtHM, presentAt, styleOf, toDate } from "../world.js";
@@ -71,14 +71,15 @@ class MockTile {
       let bx = ox + (x1 / 1000) * vw, bw = ((x2 - x1) / 1000) * vw;
       if (mirror) bx = ox + vw - (bx - ox) - bw;
       const by = oy + (y1 / 1000) * vh, bh = ((y2 - y1) / 1000) * vh;
+      const [hx, hy, hs] = headBox(bx, by, bw, bh);
       const p = this.assign.get(tid);
       const style = p === undefined ? "white" : styleOf(p, t);
-      drawBox(ctx, bx, by, bw, bh, style, p === undefined ? 0.55 : 0.95);
+      drawBox(ctx, hx, hy, hs, hs, style, p === undefined ? 0.55 : 0.95);
       if (p !== undefined && (W.people[p].role !== "IRRELEVANT" || style !== "white") && (this.big || bh > 40)) {
         const P = W.people[p];
         const text = style === "red" ? "THREAT" : style === "white_red" ? "POTENTIAL THREAT"
           : P.role === "PERSON OF INTEREST" ? "POI" : P.role === "IRRELEVANT" ? "" : P.role;
-        if (text) drawLabel(ctx, this.big ? `${text} · ${P.name}` : text, bx, by, bw, bh, style === "white" ? "white" : style, 0.95, w, this.big ? 12 : 8);
+        if (text) drawLabel(ctx, this.big ? `${text} · ${P.name}` : text, hx, hy, hs, hs, style === "white" ? "white" : style, 0.95, w, this.big ? 12 : 8);
       }
     }
   }
