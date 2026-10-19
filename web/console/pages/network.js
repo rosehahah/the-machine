@@ -7,6 +7,18 @@ import { W, roleClass } from "../world.js";
 const COLOR = { y: "#f2e02a", by: "#f2e02a", r: "#e8212b", w: "#f2f2f2", g: "#6d757c" };
 let root, cv, ctx, nodes = [], edges = [], idx = new Map(), mode = "EGO", graphKey = "", lastSlow = 0;
 let dragN = null, hoverN = null, pan = { x: 0, y: 0 };
+// zoom out about the centre when the layout is bigger than the canvas (pinning nodes to the edges made them bounce)
+let view = 1;
+const sx = (x) => cv.clientWidth / 2 + (x - cv.clientWidth / 2) * view;
+const sy = (y) => cv.clientHeight / 2 + (y - cv.clientHeight / 2) * view;
+const wx = (x) => cv.clientWidth / 2 + (x - cv.clientWidth / 2) / view;
+const wy = (y) => cv.clientHeight / 2 + (y - cv.clientHeight / 2) / view;
+function fit(w, h) {
+  let rx = 1, ry = 1;
+  for (const n of nodes) { rx = Math.max(rx, Math.abs(n.x - w / 2)); ry = Math.max(ry, Math.abs(n.y - h / 2)); }
+  const want = Math.min(1, (w / 2 - 30) / rx, (h / 2 - 16) / ry);
+  view = Math.abs(want - view) < 0.002 ? want : view + (want - view) * 0.15;
+}
 
 function build(t) {
   const key = `${mode}|${S.sel.person}|${Math.floor(t / 3600)}`;
@@ -50,7 +62,8 @@ function step() {
       const b = nodes[j];
       let dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy + 0.01;
       if (d2 > 90000) continue;
-      const f = (k * k) / d2 * 0.6;
+      // fades to zero at 300 px: a hard cut-off made nodes bounce across that distance forever (jitter)
+      const f = (k * k) / d2 * 0.6 * (1 - d2 / 90000);
       dx *= f; dy *= f;
       a.vx += dx; a.vy += dy; b.vx -= dx; b.vy -= dy;
     }
@@ -66,6 +79,10 @@ function step() {
     if (n === dragN) continue;
     if (ego && n.p === S.sel.person) { n.x += (cx - n.x) * 0.1; n.y += (cy - n.y) * 0.1; n.vx = n.vy = 0; continue; }
     n.vx += (cx - n.x) * 0.002; n.vy += (cy - n.y) * 0.002;
+    // soft walls: a pull that grows from zero past the edge (a hard clamp there made nodes bounce)
+    const mx = 70, my = 40;
+    if (n.x < mx) n.vx += (mx - n.x) * 0.05; else if (n.x > w - mx) n.vx += (w - mx - n.x) * 0.05;
+    if (n.y < my) n.vy += (my - n.y) * 0.05; else if (n.y > h - my) n.vy += (h - my - n.y) * 0.05;
     n.vx *= 0.82; n.vy *= 0.82;
     n.x += Math.max(-12, Math.min(12, n.vx)); n.y += Math.max(-12, Math.min(12, n.vy));
   }
@@ -104,6 +121,7 @@ function draw() {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.drawImage(ground(w, h), 0, 0);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  if (!dragN) fit(w, h);
   const sel = S.sel.person !== null ? idx.get(S.sel.person) : undefined;
   const near = new Set();
   const focus = hoverN ?? sel;
@@ -112,7 +130,7 @@ function draw() {
     const a = nodes[e.a], b = nodes[e.b], lit = e.a === focus || e.b === focus;
     ctx.strokeStyle = e.hot ? `rgba(232,33,43,${lit ? 0.95 : 0.6})` : `rgba(235,240,248,${lit ? 0.75 : Math.min(0.3, 0.05 + e.n / 60)})`;
     ctx.lineWidth = lit ? 1.4 : Math.min(1.6, 0.5 + e.n / 16);
-    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx(a.x), sy(a.y)); ctx.lineTo(sx(b.x), sy(b.y)); ctx.stroke();
   }
   ctx.textBaseline = "middle";
   nodes.forEach((n, i) => {
@@ -122,14 +140,14 @@ function draw() {
     const col = rc === "g" ? "#dfe6ee" : COLOR[rc];
     ctx.shadowColor = col; ctx.shadowBlur = rc === "g" ? 4 : 10;
     ctx.fillStyle = rc === "by" ? "#000" : col;
-    ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(sx(n.x), sy(n.y), r, 0, Math.PI * 2); ctx.fill();
     if (rc === "by") { ctx.strokeStyle = COLOR.by; ctx.lineWidth = 1.5; ctx.stroke(); }
     ctx.shadowBlur = 0;
     if (P.role !== "IRRELEVANT" || i === focus || near.has(i) || nodes.length < 40) {
       const big = i === focus;
       ctx.font = `500 ${big ? 22 : 10}px Futura, 'Futura PT', Jost, sans-serif`; ctx.letterSpacing = big ? "2px" : "1.5px";
       ctx.fillStyle = rc === "g" ? "rgba(225,230,236,.75)" : rc === "w" ? "#f2f2f2" : col;
-      ctx.fillText(P.name, n.x + r + 6, n.y);
+      ctx.fillText(P.name, sx(n.x) + r + 6, sy(n.y));
     }
     ctx.globalAlpha = 1;
   });
@@ -142,8 +160,8 @@ function infoBox(n, links) {
   const lines = [P.role, `SUBJECT ID: ${P.id}`, `SSN: ${P.ssn}`, `KNOWN LINKS: ${links}`, `OCCUPATION: ${P.occ}`];
   ctx.font = "500 9px Futura, 'Futura PT', Jost, sans-serif"; ctx.letterSpacing = "1px";
   const bw = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 18, bh = lines.length * 13 + 14;
-  let x = n.x + 18, y = n.y + 18;
-  if (x + bw > w - 10) x = n.x - 18 - bw;
+  let x = sx(n.x) + 18, y = sy(n.y) + 18;
+  if (x + bw > w - 10) x = sx(n.x) - 18 - bw;
   ctx.fillStyle = "rgba(0,0,0,.7)"; ctx.fillRect(x, y, bw, bh);
   ctx.strokeStyle = "rgba(240,240,240,.85)"; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, bw - 1, bh - 1);
   ctx.fillStyle = "#e9edf1";
@@ -152,7 +170,7 @@ function infoBox(n, links) {
 
 function nodeAt(x, y) {
   let best = null, bd = 12;
-  nodes.forEach((n, i) => { const d = Math.hypot(n.x - x, n.y - y); if (d < bd) { bd = d; best = i; } });
+  nodes.forEach((n, i) => { const d = Math.hypot(sx(n.x) - x, sy(n.y) - y); if (d < bd) { bd = d; best = i; } });
   return best;
 }
 
@@ -181,7 +199,7 @@ export default {
     cv.addEventListener("pointerdown", (e) => { const r = cv.getBoundingClientRect(); const i = nodeAt(e.clientX - r.left, e.clientY - r.top); dragN = i !== null ? nodes[i] : null; if (dragN) dragN.moved = false; });
     cv.addEventListener("pointermove", (e) => {
       const r = cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
-      if (dragN) { dragN.x = x; dragN.y = y; dragN.vx = dragN.vy = 0; dragN.moved = true; }
+      if (dragN) { dragN.x = wx(x); dragN.y = wy(y); dragN.vx = dragN.vy = 0; dragN.moved = true; }
       hoverN = nodeAt(x, y); cv.style.cursor = hoverN !== null ? "pointer" : "default";
     });
     cv.addEventListener("pointerup", () => {
