@@ -209,7 +209,7 @@ function renderFocus(arg) {
         <button data-step="-1">◀</button><button data-step="1">▶</button>
         <span class="ttl">${live ? esc(live.label) : esc(W.cameras[cam].id)}</span>
         <span class="sub">${live ? "LIVE FEED" : esc(W.cameras[cam].name)}</span>
-        ${live ? `<a class="btn" href="/">OPEN IN MPOV ↗</a>` : `<button data-map>SHOW ON MAP</button>`}</div>
+        ${live ? `<a class="btn" href="./">OPEN IN MPOV ↗</a>` : `<button data-map>SHOW ON MAP</button>`}</div>
         <div class="tile big"></div></div>
       <aside class="focus-side panel"></aside>
     </div>`;

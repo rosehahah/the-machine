@@ -24,6 +24,10 @@ export async function loadWorld() {
   W.map = map;
   const [y, m, d] = world.start.split("-").map(Number);
   W.startMs = new Date(y, m - 1, d).getTime();
+  // a static copy (the public demo site) can't regenerate the archive: slide the window so it ends today
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const want = new Date(today); want.setDate(today.getDate() - (world.days - 1));
+  if (W.startMs < want.getTime()) W.startMs = want.getTime();
   W.end = world.days * DAY;
   const s = world.sightings;
   W.n = s.t.length;

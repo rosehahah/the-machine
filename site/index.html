@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Machine</title>
+<meta name="description" content="A fan-made, open-source recreation of The Machine from Person of Interest. Explore the console in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Machine — a Person of Interest fan recreation">
+<meta property="og:description" content="&quot;You are being watched.&quot; The Machine's interface, rebuilt frame by frame from all five seasons. Open source. Explore the console in your browser.">
+<meta property="og:url" content="https://rosehahah.github.io/the-machine/">
+<meta property="og:image" content="https://rosehahah.github.io/the-machine/screenshots/card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://rosehahah.github.io/the-machine/screenshots/card.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: "STM"; src: url("fonts/ShareTechMono-Regular.ttf") format("truetype"); }
+@font-face { font-family: "VT"; src: url("fonts/VT323-Regular.ttf") format("truetype"); }
+:root {
+  --bg: #050505; --fg: #f2f2f2; --dim: #8a8a8a; --line: #2a2a2a;
+  --admin: #f5d000; --threat: #e8261c;
+  --futura: "Futura", "Futura PT", "Jost", "Century Gothic", sans-serif;
+  --mono: "STM", "Menlo", monospace; --pixel: "VT", monospace;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); color-scheme: dark; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--futura); line-height: 1.55; }
+a { color: inherit; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+.mono { font-family: var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+
+header.top { display: flex; align-items: center; gap: 12px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+header.top .brand { font-weight: 600; letter-spacing: .32em; font-size: 15px; display: flex; align-items: center; gap: 10px; }
+header.top .brand i { width: 14px; height: 14px; border: 2px solid var(--admin); display: inline-block; }
+header.top nav { margin-left: auto; display: flex; gap: 18px; font-size: 13px; }
+header.top nav a { text-decoration: none; color: var(--dim); }
+header.top nav a:hover { color: var(--fg); }
+
+.hero { position: relative; margin-top: 28px; border: 1px solid var(--line); overflow: hidden; }
+.hero img { display: block; width: 100%; height: auto; filter: contrast(1.05); }
+.hero .box { position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%); width: min(560px, 86%); background: #000; border: 1px solid #fff; }
+.hero .box b { display: block; padding: 10px 16px; font-size: clamp(18px, 3.2vw, 30px); letter-spacing: .06em; color: var(--admin); }
+.hero .box span { display: block; padding: 6px 16px; background: #eee; color: #000; font-size: clamp(12px, 1.8vw, 17px); letter-spacing: .08em; }
+
+h1 { font-size: clamp(34px, 6vw, 64px); letter-spacing: .18em; font-weight: 600; margin: 48px 0 6px; }
+.quote { font-size: clamp(18px, 2.6vw, 24px); color: var(--dim); margin: 0 0 22px; font-style: italic; }
+.lede { font-size: 18px; max-width: 760px; margin: 0 0 28px; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+.btn { display: inline-block; text-decoration: none; padding: 13px 22px; font-family: var(--mono); letter-spacing: .16em; font-size: 14px; border: 1px solid #fff; }
+.btn.primary { background: var(--admin); color: #000; border-color: var(--admin); font-weight: 700; }
+.btn.primary:hover { background: #fff; border-color: #fff; }
+.btn:hover { background: #fff; color: #000; }
+.note { color: var(--dim); font-size: 13px; }
+
+section { padding: 56px 0 8px; }
+h2 { font-family: var(--mono); font-weight: 400; letter-spacing: .22em; font-size: 15px; color: var(--admin); margin: 0 0 22px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.shot { margin: 0; border: 1px solid var(--line); background: #0b0b0b; text-decoration: none; display: block; }
+.shot img { display: block; width: 100%; height: auto; }
+.shot .cap { padding: 10px 12px; font-size: 14px; }
+.shot .cap .mono { font-size: 12px; color: var(--admin); margin-right: 8px; }
+a.shot:hover { border-color: #fff; }
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.card { border: 1px solid var(--line); padding: 20px; }
+.card h3 { margin: 0 0 8px; font-size: 17px; letter-spacing: .08em; }
+.card p, .card li { color: #cfcfcf; font-size: 15px; }
+.card ul { padding-left: 18px; margin: 8px 0 0; }
+pre { background: #0d0d0d; border: 1px solid var(--line); padding: 14px; overflow-x: auto; font-family: var(--mono); font-size: 13px; margin: 12px 0 0; }
+
+.thanks { border: 1px solid var(--admin); padding: 26px; }
+.thanks p { font-size: 17px; margin: 0 0 12px; }
+.thanks p:last-child { margin: 0; }
+
+footer { margin-top: 64px; padding: 26px 0 40px; border-top: 1px solid var(--line); color: var(--dim); font-size: 13px; }
+footer p { margin: 0 0 8px; }
+
+@media (max-width: 720px) {
+  .grid, .two { grid-template-columns: 1fr; }
+  header.top nav { gap: 12px; font-size: 12px; }
+  header.top nav .hide-sm { display: none; }
+  .hero .box { bottom: 5%; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="brand"><i></i>THE MACHINE</span>
+    <nav class="mono">
+      <a href="console.html">Console</a>
+      <a class="hide-sm" href="#run">Run it</a>
+      <a href="https://github.com/rosehahah/the-machine">GitHub</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <img src="screenshots/mpov.jpg" alt="The Machine's point of view: a Grand Central camera feed with every person boxed" width="1600" height="900">
+    <div class="box"><b>ADMIN IDENTIFIED</b><span>YOU ARE BEING WATCHED.</span></div>
+  </div>
+
+  <h1>THE MACHINE</h1>
+  <p class="quote">"You are being watched. The government has a secret system…"</p>
+  <p class="lede">A fan-made, open-source recreation of The Machine from <em>Person of Interest</em>. Its point of view runs on your own Mac and iPhone cameras. It boxes everyone it sees, recognizes you as ADMIN, and issues numbers. Every box and label was checked against frames from all five seasons.</p>
+  <div class="cta">
+    <a class="btn primary" href="console.html">ENTER THE CONSOLE ↗</a>
+    <a class="btn" href="https://github.com/rosehahah/the-machine">VIEW ON GITHUB</a>
+  </div>
+  <p class="note">The console runs right here in your browser on a mock city of 500 people. Best on a desktop screen. Keys <span class="mono">1–6</span> switch pages.</p>
+
+  <section>
+    <h2>[1] THE CONSOLE</h2>
+    <div class="grid">
+      <a class="shot" href="console.html#/feeds"><img src="screenshots/feeds.jpg" alt="Camera wall" loading="lazy" width="1600" height="900"><div class="cap"><span class="mono">1 FEEDS</span>A wall of 32 cameras at real Manhattan intersections</div></a>
+      <a class="shot" href="console.html#/subjects/S0002"><img src="screenshots/subjects.jpg" alt="Primary asset dossier" loading="lazy" width="1600" height="900"><div class="cap"><span class="mono">2 SUBJECTS</span>Dossiers: PRIMARY ASSET IDENTIFIED</div></a>
+      <a class="shot" href="console.html#/cases"><img src="screenshots/cases.jpg" alt="Numbers" loading="lazy" width="1600" height="900"><div class="cap"><span class="mono">3 CASES</span>Numbers, relevant and irrelevant</div></a>
+      <a class="shot" href="console.html#/network"><img src="screenshots/network.jpg" alt="Network graph" loading="lazy" width="1600" height="900"><div class="cap"><span class="mono">4 NETWORK</span>Who was seen with whom</div></a>
+      <a class="shot" href="console.html#/map"><img src="screenshots/map.jpg" alt="Map of Manhattan" loading="lazy" width="1600" height="900"><div class="cap"><span class="mono">5 MAP</span>Manhattan, with active operations</div></a>
+      <a class="shot" href="console.html#/log"><img src="screenshots/log.jpg" alt="System log" loading="lazy" width="1600" height="900"><div class="cap"><span class="mono">6 LOG</span>The system log</div></a>
+    </div>
+  </section>
+
+  <section id="run">
+    <h2>[2] RUN IT ON YOUR OWN CAMERAS</h2>
+    <div class="two">
+      <div class="card">
+        <h3>What the MPOV does</h3>
+        <ul>
+          <li>Boxes every person on your Mac and iPhone cameras</li>
+          <li>Enroll yourself as ADMIN: yellow box, "GOOD EVENING, ADMIN."</li>
+          <li>Someone picks up a knife: white box with red corners, then THREAT</li>
+          <li>The Machine issues a number. It never says why.</li>
+          <li>Follows you from camera to camera</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Quick start (macOS)</h3>
+        <p>Needs <a href="https://docs.astral.sh/uv/">uv</a> and ffmpeg. The first run downloads the models and stock footage.</p>
+<pre>brew install uv ffmpeg
+git clone https://github.com/rosehahah/the-machine
+cd the-machine && ./run.sh</pre>
+        <p class="note">Faces stay on your Mac. Nothing is uploaded.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>[3] THANK YOU</h2>
+    <div class="thanks">
+      <p><strong>With deep thanks to <em>Person of Interest</em>.</strong></p>
+      <p>To Jonathan Nolan, Greg Plageman, J.J. Abrams, the writers, the cast and the crew: thank you for five seasons, for Harold and John, Root and Shaw, Fusco and Carter, Bear, and for The Machine. We love this show so much.</p>
+      <p>Every box, label and frame here was rebuilt by studying the episodes, one frame at a time. This project exists because of you.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Unofficial fan project. Not affiliated with or endorsed by CBS, Warner Bros. Television, Kilter Films or Bad Robot. "Person of Interest" and all related names belong to their owners. No footage or stills from the show are used.</p>
+    <p>Code: MIT · Map: © OpenStreetMap contributors (ODbL) · Footage: Mixkit · Fonts: VT323, Share Tech Mono (OFL)</p>
+  </footer>
+</div>
+</body>
+</html>

@@ -48,7 +48,7 @@ async function pollLive() {
       const open = S.liveState.numbers.filter((n) => n.open).length;
       $("#live-badge").textContent = `${S.liveState.feeds.length} LIVE${open ? ` · ${open} NUMBER${open > 1 ? "S" : ""}` : ""}`;
       $("#live-badge").classList.toggle("hot", open > 0);
-    }
+    } else if (r.status === 404) return;  // no backend (static demo site): archive only
   } catch {}
   setTimeout(pollLive, 2000);
 }

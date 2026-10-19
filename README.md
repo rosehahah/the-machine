@@ -2,6 +2,8 @@
 
 > *"You are being watched."*
 
+**▶ Explore the console in your browser: https://rosehahah.github.io/the-machine/**
+
 A fan-made, open-source recreation of **The Machine** from *Person of Interest* — its MPOV interface running on your own Mac and iPhone cameras, plus a multi-page console (camera wall, subjects, cases, network, map, log) on a mock city.
 
 ![MPOV — The Machine's point of view on a live feed](docs/screenshots/mpov.jpg)
@@ -126,6 +128,7 @@ Quick start (macOS, needs [uv](https://docs.astral.sh/uv/) and `ffmpeg`): `git c
 | `web/console/` | 控制台：`pages/` 里每页一个文件，`world.js` 读 mock 数据 |
 | `web/fonts/` | VT323（机位角标的像素字）、Share Tech Mono（S4–S5 卡片和地图上的等宽字），都是 OFL 授权 |
 | `tools/gen_world.py`、`tools/build_map.py` | 生成控制台的 mock 城市、曼哈顿地图 |
+| `site/`、`tools/build_site.sh` | 公开演示站（落地页 + 控制台），`tools/build_site.sh --publish` 推到 gh-pages 分支 |
 | `research/hits/` | 用 CLIP 在全剧里搜出来的参考帧（`tools/find_shots.py`，需要你自己的片源；不放进仓库） |
 | `data/identities.json` | 录入的人脸特征。**只存在这台 Mac 上**，删掉这个文件就清空了所有人 |
 | `data/config.json` | 推送设置 |

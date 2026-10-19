@@ -124,7 +124,7 @@ function renderLive(id) {
       <div class="kv"><span>SUBJECT</span><b>${esc(n.subject)}</b><span>DESIGNATION</span><b>${esc(n.role || "NONE")}</b>
       <span>LIST</span><b>${n.list}</b><span>FEED</span><b>${esc(n.feed_label)}</b></div></div>
     <h3>EVENTS</h3><div class="evlist">${n.timeline.map((l) => `<div class="ev"><span class="tm">${esc(l.t)}</span><span class="tx">${esc(l.text)}</span></div>`).join("")}</div>
-    <div class="d-actions"><a class="btn" href="/">OPEN MPOV ↗</a></div>`;
+    <div class="d-actions"><a class="btn" href="./">OPEN MPOV ↗</a></div>`;
 }
 
 export default {

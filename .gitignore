@@ -27,3 +27,4 @@ research/raw/
 
 # generated on startup by tools/gen_world.py
 web/data/world.json
+_site/
