@@ -1,0 +1,8 @@
+opencv-python==5.0.0.93
+onnxruntime==1.31.0
+numpy==2.4.6
+fastapi==0.143.0
+uvicorn[standard]==0.54.0
+supervision==0.30.9
+scipy==1.17.1
+shapely==2.2.0

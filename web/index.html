@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Machine</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="video"></canvas>
+<canvas id="hud"></canvas>
+<div id="grain"></div>
+
+<!-- camera OSD -->
+<div id="osd">
+  <div id="osd-cam"></div>
+  <div id="osd-time"></div>
+</div>
+<div id="osd-meta"></div>
+<div id="feeds"></div>
+
+<!-- status bar -->
+<div id="status" class="hidden">
+  <div class="top"></div>
+  <div class="bottom"><span class="text"></span><div class="progress"><i></i></div></div>
+</div>
+
+<!-- dossier -->
+<div id="dossier" class="hidden">
+  <div class="head"></div>
+  <div class="sub"></div>
+  <div class="cols"><img class="photo" alt=""><div class="body"></div></div>
+  <div class="warn"></div>
+</div>
+
+<!-- machine text (typewriter) -->
+<div id="say"></div>
+
+<!-- no signal -->
+<div id="nosignal" class="hidden">
+  <div class="big">NO SIGNAL</div>
+  <div class="small"></div>
+</div>
+
+<!-- control panel -->
+<button id="menu-btn" title="Control (M)">ADMIN TERMINAL</button>
+<aside id="panel" class="hidden">
+  <header>ADMIN TERMINAL <button id="panel-close" aria-label="Close">×</button></header>
+  <section>
+    <h3>FEEDS</h3>
+    <div id="feed-list"></div>
+    <label class="row"><input type="checkbox" id="follow" checked> AUTO-FOLLOW IDENTIFIED SUBJECTS</label>
+    <button id="rescan">RESCAN CAMERAS</button>
+  </section>
+  <section>
+    <h3>ENROLL SUBJECT</h3>
+    <p class="hint">Face the current feed alone, about an arm's length away.</p>
+    <input id="en-name" placeholder="NAME  (e.g. FINCH, HAROLD)" autocomplete="off">
+    <input id="en-alias" placeholder="ALIAS / OCCUPATION (optional)" autocomplete="off">
+    <select id="en-role"></select>
+    <button id="enroll" class="primary">ENROLL FROM CURRENT FEED</button>
+  </section>
+  <section>
+    <h3>KNOWN SUBJECTS</h3>
+    <div id="id-list"></div>
+  </section>
+  <section>
+    <h3>THE LIST</h3>
+    <div class="tabs"><button data-list="IRRELEVANT" class="on">IRRELEVANT <b></b></button><button data-list="RELEVANT">RELEVANT <b></b></button></div>
+    <div id="num-list"></div>
+  </section>
+  <section>
+    <h3>DRILLS</h3>
+    <p class="hint">Rehearse on the biggest subject in the current feed. Real triggers: a knife, scissors or bat in someone's hand; a fall.</p>
+    <div class="pair"><button data-drill="weapon">SIMULATE ARMED SUBJECT</button><button data-drill="fall">SIMULATE SUBJECT DOWN</button></div>
+  </section>
+  <section>
+    <h3>DISSEMINATION</h3>
+    <label class="row"><input type="checkbox" id="nt-mac"> MAC NOTIFICATIONS</label>
+    <p class="hint">Optional: send each new number by iMessage (phone number or Apple ID). Only the number and its code are sent, never the photo.</p>
+    <div class="pair"><input id="nt-im" placeholder="IMESSAGE TO (OFF)" autocomplete="off"><button id="nt-save">SAVE</button></div>
+    <button id="nt-test">SEND TEST</button>
+  </section>
+  <section>
+    <h3>DISPLAY</h3>
+    <label class="row"><input type="checkbox" id="fx-on" checked> IMAGE TREATMENT</label>
+    <label class="row"><input type="checkbox" id="snd-on" checked> SOUND</label>
+    <button id="reboot">REPLAY SYSTEM STARTUP</button>
+  </section>
+  <footer>KEYS: M TERMINAL · 1–9 FEED · F FULLSCREEN · X TREATMENT</footer>
+</aside>
+
+<!-- boot -->
+<div id="boot"><pre></pre></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+.DS_Store
+__pycache__/
+.venv/
+.venv-research/
+
+# personal: face embeddings and push settings
+/data/
+
+# large models — tools/fetch_models.sh, tools/export_owlv2.py
+models/*.onnx
+models/clip/
+
+# stock footage (Mixkit license: don't redistribute the clips themselves) — tools/build_clips.py
+# keeps only the person tracks we computed for them
+media/raw/
+web/media/*
+!web/media/clips/
+web/media/clips/*
+!web/media/clips/*.json
+
+# frames and text from the show / wiki (copyrighted) and the CLIP index built from them
+research/img/
+research/hits/
+research/index/
+research/strips/
+research/raw/
+
+# generated on startup by tools/gen_world.py
+web/data/world.json
