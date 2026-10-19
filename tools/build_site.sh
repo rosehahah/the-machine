@@ -10,7 +10,7 @@ cp web/console.html web/hud.js _site/
 cp -R web/console web/fonts web/data _site/
 cp -R web/media/clips web/media/crops.jpg _site/media/
 cp docs/screenshots/*.jpg _site/screenshots/
-sips -Z 1200 docs/screenshots/mpov.jpg --out _site/screenshots/card.jpg >/dev/null
+sips -Z 1200 docs/screenshots/hero.jpg --out _site/screenshots/card.jpg >/dev/null
 touch _site/.nojekyll
 du -sh _site
 if [[ $1 == --publish ]]; then
