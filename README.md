@@ -4,6 +4,17 @@
 
 A fan-made, open-source recreation of **The Machine** from *Person of Interest* — its MPOV interface running on your own Mac and iPhone cameras, plus a multi-page console (camera wall, subjects, cases, network, map, log) on a mock city.
 
+![MPOV — The Machine's point of view on a live feed](docs/screenshots/mpov.jpg)
+
+| | |
+|---|---|
+| ![Camera wall](docs/screenshots/feeds.jpg) **FEEDS** — camera wall | ![Single feed](docs/screenshots/feed.jpg) **FEEDS** — single camera |
+| ![Subject dossier](docs/screenshots/subjects.jpg) **SUBJECTS** — dossier | ![Case](docs/screenshots/cases.jpg) **CASES** — numbers |
+| ![Network](docs/screenshots/network.jpg) **NETWORK** — who was seen with whom | ![Map](docs/screenshots/map.jpg) **MAP** — Manhattan |
+| ![Log](docs/screenshots/log.jpg) **LOG** — system log | |
+
+<sub>Screenshots of this project running on mock data and Mixkit stock footage. No frames from the show.</sub>
+
 **With deep thanks to *Person of Interest*.** To Jonathan Nolan, Greg Plageman, J.J. Abrams, the writers, the cast and the crew: thank you for five seasons, for Harold and John, Root and Shaw, Fusco and Carter, Bear — and for The Machine. We love this show so much. Every box, label and frame here was rebuilt by studying the episodes, one frame at a time. This project exists because of you.
 
 *Unofficial fan project. Not affiliated with or endorsed by CBS, Warner Bros. Television, Kilter Films or Bad Robot. "Person of Interest" and all related names belong to their owners. No footage or stills from the show are included in this repository.*
