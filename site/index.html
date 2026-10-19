@@ -38,11 +38,52 @@ header.top nav { margin-left: auto; display: flex; gap: 18px; font-size: 13px; }
 header.top nav a { text-decoration: none; color: var(--dim); }
 header.top nav a:hover { color: var(--fg); }
 
-.hero { position: relative; margin-top: 28px; border: 1px solid var(--line); overflow: hidden; }
-.hero img { display: block; width: 100%; height: auto; filter: contrast(1.05); }
-.hero .box { position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%); width: min(560px, 86%); background: #000; border: 1px solid #fff; }
-.hero .box b { display: block; padding: 10px 16px; font-size: clamp(18px, 3.2vw, 30px); letter-spacing: .06em; color: var(--admin); }
-.hero .box span { display: block; padding: 6px 16px; background: #eee; color: #000; font-size: clamp(12px, 1.8vw, 17px); letter-spacing: .08em; }
+
+
+/* ---------- hero: live MPOV replay (hero.js) ---------- */
+#hero { position: relative; height: 100vh; height: 100svh; min-height: 520px; max-height: 1100px; overflow: hidden;
+  background: #020304 url("media/clips/4332.jpg") center / cover no-repeat; }
+#hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#hero-video { position: absolute; width: 2px; height: 2px; opacity: 0; pointer-events: none; }
+#hero-grain { position: absolute; inset: 0; pointer-events: none; opacity: .5; mix-blend-mode: overlay;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+#hero .osd { position: absolute; top: 88px; font-family: var(--pixel); color: #e9eef2; letter-spacing: .3em;
+  font-size: clamp(16px, 2.3vw, 34px); line-height: 1;
+  text-shadow: -1.5px 0 rgba(255,40,60,.55), 1.5px 0 rgba(40,220,255,.55), 0 0 6px rgba(255,255,255,.25); }
+#hero-cam { left: 4.5%; max-width: 60%; } #hero-time { right: 4.5%; }
+#hero-meta { position: absolute; left: 4.5%; bottom: 40%; font-size: 11px; letter-spacing: .08em; line-height: 1.4;
+  color: rgba(242,242,242,.85); text-shadow: 0 0 4px rgba(0,0,0,.8); }
+#hero-meta b { font-weight: 600; }
+#hero-status { position: absolute; left: 50%; top: 34%; transform: translateX(-50%); min-width: min(560px, 86vw);
+  border: 2px solid #f4f4f4; border-radius: 5px; overflow: hidden; animation: pop .18s ease-out;
+  box-shadow: 0 0 10px rgba(255,255,255,.25), 0 0 0 1px rgba(0,0,0,.6); }
+#hero-status .top { background: #050505; padding: .28em .7em .18em; font-size: clamp(20px, 2.6vw, 34px); font-weight: 600;
+  letter-spacing: .04em; color: var(--admin); text-shadow: 0 0 8px rgba(242,224,42,.45); white-space: nowrap; }
+#hero-status .bottom { background: #f1f1f1; color: #111; padding: .25em .9em .2em; font-size: clamp(13px, 1.6vw, 21px);
+  font-weight: 500; letter-spacing: .04em; }
+#hero-status.hidden { display: none; }
+@keyframes pop { from { opacity: 0; transform: translateX(-50%) scaleY(.2); } }
+#hero-say { position: absolute; left: 0; right: 0; top: 36%; text-align: center; font-weight: 600;
+  font-size: clamp(16px, 2.2vw, 30px); letter-spacing: .12em; text-shadow: 0 0 10px rgba(0,0,0,.9); }
+#hero-say span { background: rgba(0,0,0,.72); padding: .15em .5em; }
+#hero-say span:empty { display: none; }
+#hero-boot { position: absolute; inset: 0; background: #000; display: flex; align-items: center; justify-content: center;
+  transition: opacity .5s; z-index: 3; }
+#hero-boot pre { font-family: var(--mono); color: #dfe6ea; font-size: clamp(12px, 1.5vw, 16px); letter-spacing: .14em;
+  line-height: 1.7; min-width: min(460px, 86vw); margin: 0; }
+#hero-boot pre div:first-child { color: var(--admin); }
+#hero-boot.out { opacity: 0; }
+#hero .shade { position: absolute; left: 0; right: 0; bottom: 0; height: 52%; pointer-events: none;
+  background: linear-gradient(to top, rgba(5,5,5,.96) 8%, rgba(5,5,5,.6) 50%, transparent); }
+#hero .top-shade { position: absolute; left: 0; right: 0; top: 0; height: 120px; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(5,5,5,.75), transparent); }
+#hero > .wrap { position: absolute; left: 0; right: 0; top: 0; z-index: 4; }
+#hero header.top { border-bottom: 0; }
+#hero header.top nav a { color: #cfcfcf; }
+#hero .intro { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding-bottom: 44px; }
+#hero .intro h1 { margin: 0 0 4px; text-shadow: 0 0 18px rgba(0,0,0,.8); }
+#hero .intro .quote { color: #c9c9c9; }
+#hero .intro .cta { margin: 0; }
 
 h1 { font-size: clamp(34px, 6vw, 64px); letter-spacing: .18em; font-weight: 600; margin: 48px 0 6px; }
 .quote { font-size: clamp(18px, 2.6vw, 24px); color: var(--dim); margin: 0 0 22px; font-style: italic; }
@@ -82,34 +123,53 @@ footer p { margin: 0 0 8px; }
   .grid, .two { grid-template-columns: 1fr; }
   header.top nav { gap: 12px; font-size: 12px; }
   header.top nav .hide-sm { display: none; }
-  .hero .box { bottom: 5%; }
+  #hero .osd { top: 76px; }
+  #hero-meta { bottom: 46%; }
+  #hero-status { top: 26%; }
+  #hero-say { top: 28%; }
+  #hero .hide-sm { display: none; }
 }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="top">
-    <span class="brand"><i></i>THE MACHINE</span>
-    <nav class="mono">
+<section id="hero" aria-label="The Machine's point of view: a live camera feed in Times Square with every person boxed">
+  <video id="hero-video" muted loop playsinline autoplay preload="auto"></video>
+  <canvas id="hero-fx"></canvas>
+  <canvas id="hero-hud"></canvas>
+  <div id="hero-grain"></div>
+  <div class="top-shade"></div>
+  <div class="osd" id="hero-cam"></div>
+  <div class="osd" id="hero-time"></div>
+  <div id="hero-meta"></div>
+  <div id="hero-status" class="hidden"><div class="top"></div><div class="bottom"></div></div>
+  <div id="hero-say"><span></span></div>
+  <div class="shade"></div>
+  <div class="wrap">
+    <header class="top">
+      <span class="brand"><i></i>THE MACHINE</span>
+      <nav class="mono">
       <a href="console.html">Console</a>
       <a class="hide-sm" href="#run">Run it</a>
       <a href="https://github.com/rosehahah/the-machine">GitHub</a>
-    </nav>
-  </header>
-
-  <div class="hero">
-    <img src="screenshots/mpov.jpg" alt="The Machine's point of view: a Grand Central camera feed with every person boxed" width="1600" height="900">
-    <div class="box"><b>ADMIN IDENTIFIED</b><span>YOU ARE BEING WATCHED.</span></div>
+      </nav>
+    </header>
   </div>
+  <div class="intro"><div class="wrap">
+    <h1>THE MACHINE</h1>
+    <p class="quote">"You are being watched. The government has a secret system…"</p>
+    <div class="cta">
+      <a class="btn primary" href="console.html">ENTER THE CONSOLE ↗</a>
+      <a class="btn" href="https://github.com/rosehahah/the-machine">VIEW ON GITHUB</a>
+    </div>
+  </div></div>
+  <div id="hero-boot"><pre></pre></div>
+</section>
 
-  <h1>THE MACHINE</h1>
-  <p class="quote">"You are being watched. The government has a secret system…"</p>
+<div class="wrap">
+  <section style="padding-top:40px">
   <p class="lede">A fan-made, open-source recreation of The Machine from <em>Person of Interest</em>. Its point of view runs on your own Mac and iPhone cameras. It boxes everyone it sees, recognizes you as ADMIN, and issues numbers. Every box and label was checked against frames from all five seasons.</p>
-  <div class="cta">
-    <a class="btn primary" href="console.html">ENTER THE CONSOLE ↗</a>
-    <a class="btn" href="https://github.com/rosehahah/the-machine">VIEW ON GITHUB</a>
-  </div>
   <p class="note">The console runs right here in your browser on a mock city of 500 people. Best on a desktop screen. Keys <span class="mono">1–6</span> switch pages.</p>
+  </section>
 
   <section>
     <h2>[1] THE CONSOLE</h2>
@@ -161,5 +221,6 @@ cd the-machine && ./run.sh</pre>
     <p>Code: MIT · Map: © OpenStreetMap contributors (ODbL) · Footage: Mixkit · Fonts: VT323, Share Tech Mono (OFL)</p>
   </footer>
 </div>
+<script type="module" src="hero.js"></script>
 </body>
 </html>

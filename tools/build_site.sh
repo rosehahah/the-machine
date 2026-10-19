@@ -5,7 +5,7 @@
 set -e
 cd "${0:A:h}/.."
 rm -rf _site && mkdir -p _site/media _site/screenshots
-cp site/index.html _site/
+cp site/index.html site/hero.js web/fx.js _site/
 cp web/console.html web/hud.js _site/
 cp -R web/console web/fonts web/data _site/
 cp -R web/media/clips web/media/crops.jpg _site/media/
