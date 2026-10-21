@@ -94,6 +94,9 @@ h1 { font-size: clamp(34px, 6vw, 64px); letter-spacing: .18em; font-weight: 600;
 .btn.primary:hover { background: #fff; border-color: #fff; }
 .btn:hover { background: #fff; color: #000; }
 .note { color: var(--dim); font-size: 13px; }
+.crosslink { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; color: var(--dim); margin: 18px 0 0; overflow-wrap: anywhere; }
+.crosslink a { color: var(--admin); text-decoration: none; border-bottom: 1px solid rgba(245,208,0,.4); }
+.crosslink a:hover { color: #fff; border-color: #fff; }
 
 section { padding: 56px 0 8px; }
 h2 { font-family: var(--mono); font-weight: 400; letter-spacing: .22em; font-size: 15px; color: var(--admin); margin: 0 0 22px; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
@@ -106,6 +109,7 @@ h2 { font-family: var(--mono); font-weight: 400; letter-spacing: .22em; font-siz
 a.shot:hover { border-color: #fff; }
 
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.two > * { min-width: 0; }
 .card { border: 1px solid var(--line); padding: 20px; }
 .card h3 { margin: 0 0 8px; font-size: 17px; letter-spacing: .08em; }
 .card p, .card li { color: #cfcfcf; font-size: 15px; }
@@ -169,6 +173,7 @@ footer p { margin: 0 0 8px; }
   <section style="padding-top:40px">
   <p class="lede">A fan-made, open-source recreation of The Machine from <em>Person of Interest</em>. Its point of view runs on your own Mac and iPhone cameras. It boxes everyone it sees, recognizes you as ADMIN, and issues numbers. Every box and label was checked against frames from all five seasons.</p>
   <p class="note">The console runs right here in your browser on a mock city of 500 people. Best on a desktop screen. Keys <span class="mono">1–6</span> switch pages.</p>
+  <p class="crosslink">Want the machine to judge <em>you</em>? This project's surveillance-style overlay is becoming a camera mode in my iOS app XianNow Camera (rolling out in the next update) → <a href="https://apps.apple.com/app/id6814311061?ct=machine_demo" target="_blank" rel="noopener">App Store</a></p>
   </section>
 
   <section>

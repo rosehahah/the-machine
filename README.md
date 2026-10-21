@@ -10,6 +10,8 @@
 
 **[▶ Explore the console in your browser](https://rosehahah.github.io/the-machine/)** &nbsp;·&nbsp; [Run it on your own cameras](#quick-start) &nbsp;·&nbsp; [How it was made](#how-it-was-made)
 
+<sub>📷 Want the machine to judge <i>you</i>? I turned this project's surveillance-style overlay into a camera mode in my iOS app <b>XianNow Camera</b> (rolling out in the next update) → <a href="https://apps.apple.com/app/id6814311061?ct=machine_readme">App Store</a></sub>
+
 </div>
 
 A fan-made, open-source recreation of **The Machine** from *Person of Interest*. Its point of view (the MPOV) runs on your own Mac and iPhone cameras: it boxes everyone it sees, recognizes you as ADMIN, notices a knife or a fall, and issues a number. It never says why. Alongside it is a multi-page console (camera wall, subjects, cases, network, map, log) on a mock city of 500 people.

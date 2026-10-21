@@ -10,6 +10,8 @@
 
 **[▶ 在浏览器里打开控制台](https://rosehahah.github.io/the-machine/)** &nbsp;·&nbsp; [接自己的摄像头运行](#快速开始) &nbsp;·&nbsp; [怎么做出来的](#怎么做出来的)
 
+<sub>📷 想让机器判定<i>你</i>？我把这个项目的监控风格界面做成了我的 iOS 相机 App <b>苋在相机</b>（XianNow Camera）里的拍照模式（下个版本上线）→ <a href="https://apps.apple.com/app/id6814311061?ct=machine_readme">App Store</a></sub>
+
 </div>
 
 粉丝自制、开源的《疑犯追踪》（*Person of Interest*）**The Machine** 复刻。它的视角（MPOV）跑在你自己的 Mac 和 iPhone 摄像头上：框出画面里的每个人，认出你是 ADMIN，发现有人拿刀或摔倒，然后给出一个号码——它从不解释原因。另外还有一个多页面的控制台（摄像头墙、人员、案件、关系网、地图、日志），跑在一座 500 人的 mock 城市上。

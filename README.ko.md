@@ -10,6 +10,8 @@
 
 **[▶ 브라우저에서 콘솔 열기](https://rosehahah.github.io/the-machine/)** &nbsp;·&nbsp; [내 카메라로 실행하기](#빠른-시작) &nbsp;·&nbsp; [어떻게 만들었나](#어떻게-만들었나)
 
+<sub>📷 머신이 <i>당신</i>을 판정하게 해 볼까요? 이 프로젝트의 감시 카메라 스타일 오버레이를 제 iOS 카메라 앱 <b>XianNow Camera</b>의 촬영 모드로 만들었습니다(다음 업데이트에서 배포 예정) → <a href="https://apps.apple.com/app/id6814311061?ct=machine_readme">App Store</a></sub>
+
 </div>
 
 미국 드라마 〈퍼슨 오브 인터레스트〉(*Person of Interest*)의 **The Machine**을 재현한 팬메이드 오픈소스 프로젝트입니다. The Machine의 시점(MPOV)이 여러분의 Mac과 iPhone 카메라에서 돌아갑니다. 화면 속 모든 사람에게 박스를 치고, 여러분을 ADMIN으로 알아보고, 칼이나 넘어짐을 감지하면 '번호'를 하나 내놓습니다. 이유는 절대 말하지 않습니다. 여기에 500명이 사는 가상 도시를 무대로 한 여러 페이지짜리 콘솔(카메라 월, 인물, 사건, 관계도, 지도, 로그)도 함께 있습니다.
