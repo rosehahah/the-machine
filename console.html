@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Machine · Console</title>
+<link rel="stylesheet" href="console/console.css">
+</head>
+<body>
+<header id="top">
+  <a class="brand" href="#/feeds">THE MACHINE</a>
+  <nav id="nav">
+    <a href="#/feeds" data-page="feeds"><i>1</i>FEEDS</a>
+    <a href="#/subjects" data-page="subjects"><i>2</i>SUBJECTS</a>
+    <a href="#/cases" data-page="cases"><i>3</i>CASES</a>
+    <a href="#/network" data-page="network"><i>4</i>NETWORK</a>
+    <a href="#/map" data-page="map"><i>5</i>MAP</a>
+    <a href="#/log" data-page="log"><i>6</i>LOG</a>
+  </nav>
+  <span id="live-badge"></span>
+  <div id="clock"><span class="day"></span><span class="time"></span></div>
+  <a class="mpov" href="./" title="Single live feed with the full MPOV overlay">MPOV ↗</a>
+</header>
+<main id="page"></main>
+<footer id="timeline"></footer>
+<div id="cboot"><pre></pre></div>
+<div id="grain"></div>
+<script type="module" src="console/main.js"></script>
+</body>
+</html>
