@@ -107,7 +107,7 @@ class Feed:
             if got is None:
                 continue
             n, is_new = got
-            print(f"[machine] {inc['kind']} on {self.label} track {inc['tid']} -> {n['number']} "
+            print(f"[machine] {inc['kind']}{' (offscreen)' if inc.get('offscreen') else ''} on {self.label} track {inc['tid']} -> {n['number']} "
                   f"({n['list']}{', new' if is_new else ''})", flush=True)
             self.sys.event({"type": "incident", "kind": inc["kind"], "feed": self.id, "track": inc["tid"],
                             "why": inc.get("why"), "weapon": inc.get("weapon"), "new": is_new, "number": n})

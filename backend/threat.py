@@ -149,8 +149,15 @@ def assess(tracks: dict, alive_ids: set, weapons: list[dict], W: int, H: int, no
         recent = [h for h in t.hist if t_last - h[0] <= FALL_WINDOW]
         top = min(recent, key=lambda h: h[1])
         if last_cy + last_side * 0.5 > 0.85 * H and last_cy - top[1] >= 0.5 * _fall_threshold(top[2], top[3], H):
-            t.down = True
-            incident("down", st, drill=False, offscreen=True)
+            # The head drop alone is not a fall: someone walking out of the bottom of the frame
+            # descends just as far. The body box must have changed shape as well — a collapsed
+            # person is wide and short — and a box clipped by the frame bottom proves nothing.
+            x1, y1, x2, y2 = st.body
+            body_h = y2 - y1
+            tallest = max(h[3] for h in recent)
+            if body_h <= 0.6 * tallest and x2 - x1 >= body_h and y2 < H - 1:
+                t.down = True
+                incident("down", st, drill=False, offscreen=True)
     return incidents
 
 
