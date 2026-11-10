@@ -33,6 +33,7 @@ class Threat:
     hostile: bool = False
     down: bool = False
     drop: tuple | None = None      # fall candidate: (t, cy_before, threshold)
+    offscreen_pose: tuple[float, float] | None = None  # (time, recovery head y)
     drill_weapon_until: float = 0.0
     drill_fall: bool = False
 
@@ -128,6 +129,14 @@ def assess(tracks: dict, alive_ids: set, weapons: list[dict], W: int, H: int, no
         recent = [h for h in t.hist if now - h[0] <= FALL_WINDOW]
         top = min(recent, key=lambda h: h[1])
         thr = _fall_threshold(top[2], top[3], H)
+        if t.offscreen_pose is not None and cy < t.offscreen_pose[1]:
+            t.offscreen_pose = None
+        # Save the visible collapse before a later frame clips the body at the bottom.
+        if not t.down and cy + side * 0.5 > 0.85 * H and cy - top[1] >= 0.5 * thr:
+            x1, y1, x2, y2 = st.body
+            body_h = y2 - y1
+            if 0 < body_h <= 0.6 * max(h[3] for h in recent) and x2 - x1 >= body_h and y2 < H - 1:
+                t.offscreen_pose = (now, top[1] + 0.3 * thr)
         if t.drop is None and not t.down and cy - top[1] >= thr:
             t.drop = (now, top[1], thr)
         if t.drop is not None:
@@ -136,6 +145,7 @@ def assess(tracks: dict, alive_ids: set, weapons: list[dict], W: int, H: int, no
                 if t.down:
                     incident("recovered", st)
                 t.drop, t.down = None, False
+                t.offscreen_pose = None
             elif not t.down and now - t0 >= FALL_CONFIRM:
                 t.down = True
                 incident("down", st, drill=False)
@@ -145,19 +155,9 @@ def assess(tracks: dict, alive_ids: set, weapons: list[dict], W: int, H: int, no
         t = st.threat
         if tid in alive_ids or t.down or not t.hist or now - st.last_seen < FALL_CONFIRM:
             continue
-        t_last, last_cy, last_side, _ = t.hist[-1]
-        recent = [h for h in t.hist if t_last - h[0] <= FALL_WINDOW]
-        top = min(recent, key=lambda h: h[1])
-        if last_cy + last_side * 0.5 > 0.85 * H and last_cy - top[1] >= 0.5 * _fall_threshold(top[2], top[3], H):
-            # The head drop alone is not a fall: someone walking out of the bottom of the frame
-            # descends just as far. The body box must have changed shape as well — a collapsed
-            # person is wide and short — and a box clipped by the frame bottom proves nothing.
-            x1, y1, x2, y2 = st.body
-            body_h = y2 - y1
-            tallest = max(h[3] for h in recent)
-            if body_h <= 0.6 * tallest and x2 - x1 >= body_h and y2 < H - 1:
-                t.down = True
-                incident("down", st, drill=False, offscreen=True)
+        if t.offscreen_pose is not None and t.hist[-1][0] - t.offscreen_pose[0] <= FALL_WINDOW:
+            t.down = True
+            incident("down", st, drill=False, offscreen=True)
     return incidents
 
 
